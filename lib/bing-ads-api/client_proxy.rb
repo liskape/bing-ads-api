@@ -26,7 +26,7 @@ module BingAdsApi
 	class ClientProxy
 
 		# Public : Namespace para atributos bing. Hace referencia a la versión de API usada
-		NAMESPACE = :v9
+		DEFAULT_NAMESPACE = :v11
 
 		# Public : Case empleado los nombres de atributos en los XML
 		KEYS_CASE = :camelcase
@@ -77,7 +77,7 @@ module BingAdsApi
 				@wsdl_url        ||= options[:wsdl_url]
 				@account_id      ||= options[:account_id]
 				@customer_id     ||= options[:customer_id]
-				@namespace       ||= options[:namespace]
+				@namespace       ||= (options[:namespace] || DEFAULT_NAMESPACE)
 			end
 			self.service = get_proxy(options[:proxy])
 		end
@@ -117,7 +117,7 @@ module BingAdsApi
 				settings = {
 					convert_request_keys_to: KEYS_CASE,
 					wsdl: self.wsdl_url,
-					namespace_identifier: NAMESPACE,
+					namespace_identifier: namespace,
 					soap_header: build_headers
 				}
 				settings.merge!(client_settings) if client_settings
@@ -128,15 +128,15 @@ module BingAdsApi
 
 			def build_headers
 				headers = {
-					"#{NAMESPACE.to_s}:CustomerAccountId" => self.account_id,
-					"#{NAMESPACE.to_s}:CustomerId" => self.customer_id,
-					"#{NAMESPACE.to_s}:DeveloperToken" => self.developer_token,
+					"#{namespace.to_s}:CustomerAccountId" => self.account_id,
+					"#{namespace.to_s}:CustomerId" => self.customer_id,
+					"#{namespace.to_s}:DeveloperToken" => self.developer_token,
 				}
 				if self.authentication_token
-					headers["#{NAMESPACE.to_s}:AuthenticationToken"] = self.authentication_token
+					headers["#{namespace.to_s}:AuthenticationToken"] = self.authentication_token
 				else
-					headers["#{NAMESPACE.to_s}:UserName"] = self.username
-					headers["#{NAMESPACE.to_s}:Password"] = self.password
+					headers["#{namespace.to_s}:UserName"] = self.username
+					headers["#{namespace.to_s}:Password"] = self.password
 				end
 				return headers
 			end

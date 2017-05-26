@@ -60,9 +60,9 @@ module BingAdsApi
 			download_request = {
 				account_ids: {"ins0:long" => account_ids},
 		    data_scope: data_scope_to_array(options[:data_scope]),
+				download_entities: entities_for_soap(entities),
 		    download_file_type: DOWNLOAD_FILE_TYPES[options[:download_file_type].to_s],
-				entities: entities_for_soap(entities),
-		    format_version: options[:format_version] || 4.0,
+		    format_version: options[:format_version] || 5.0,
 		    last_sync_time_in_utc: options[:last_sync_time_in_utc],
 		    location_target_version: options[:location_target_version],
 		    performance_stats_date_range: options[:performance_stats_date_range]
@@ -75,6 +75,32 @@ module BingAdsApi
 			return download_request_id
 		end
 
+
+		def download_campaigns_by_campaign_ids(campaign_ids, account_id, entities, options={})
+			campaigns = campaign_ids.map do |campaign_id|
+				{
+					campaign_id: campaign_id,
+				  parent_account_id: account_id,
+				}
+			end
+
+			download_request = {
+				campaigns: { campaign_scope: campaigns },
+		    data_scope: data_scope_to_array(options[:data_scope]),
+				download_entities: { download_entity: entities_for_soap(entities) },
+		    download_file_type: DOWNLOAD_FILE_TYPES[options[:download_file_type].to_s],
+		    format_version: options[:format_version] || 5.0,
+		    last_sync_time_in_utc: options[:last_sync_time_in_utc],
+		    location_target_version: options[:location_target_version],
+		    performance_stats_date_range: options[:performance_stats_date_range]
+			}
+
+			response = call(:download_campaigns_by_campaign_ids,
+				download_request)
+			response_hash = get_response_hash(response, __method__)
+			download_request_id = response_hash[:download_request_id]
+			return download_request_id
+		end
 
 		# Public: Get an upload URL and corresponding request ID. The URL can be
 		# used to post a bulk upload file to, and the request ID can be used to
@@ -128,15 +154,26 @@ module BingAdsApi
 			upload_request = get_bulk_upload_url(account_id, options)
 
 			# TODO: Extract this HTTP interface to separate object
-			response = RestClient.post(
-				upload_request[:upload_url],
-				{file: File.new(file)},
-				"UserName" => client_proxy.username,
-				"Password" => client_proxy.password,
-				"DeveloperToken" => client_proxy.developer_token,
-				"CustomerId" => client_proxy.customer_id,
-				"AccountId" => account_id,
-			)
+			if client_proxy.authentication_token.present?
+				response = RestClient.post(
+					upload_request[:upload_url],
+					{file: File.new(file)},
+					"AuthenticationToken" => client_proxy.authentication_token,
+					"DeveloperToken" => client_proxy.developer_token,
+					"CustomerId" => client_proxy.customer_id,
+					"AccountId" => account_id,
+				)
+			else
+				response = RestClient.post(
+					upload_request[:upload_url],
+					{file: File.new(file)},
+					"UserName" => client_proxy.username,
+					"Password" => client_proxy.password,
+					"DeveloperToken" => client_proxy.developer_token,
+					"CustomerId" => client_proxy.customer_id,
+					"AccountId" => account_id,
+				)
+			end
 
 			raise "File upload failed. HTTP response:\n#{response.to_str}" unless response.code == 200
 
@@ -232,8 +269,7 @@ module BingAdsApi
 					elsif entity.is_a?(Symbol)
 						valid_entities[entity.to_s]
 					end
-				end.join(" ")
-			end
-
+				end
+	 		end
 	end
 end
