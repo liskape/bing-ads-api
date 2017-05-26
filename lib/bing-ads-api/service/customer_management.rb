@@ -72,8 +72,9 @@ module BingAdsApi
 			return accounts
 		end
 
-		def get_accounts_info
-			call(:get_accounts_info, {})
+		def get_user
+			response =  call(:get_user, {})
+			get_response_hash(response, __method__)
 		end
 
 		def get_customers_info
@@ -81,11 +82,14 @@ module BingAdsApi
 			# error: The Customer.Name property must be between 1 and 100 characters long.
 		end
 
+		def get_account(account_id)
+			response = call(:get_account, account_id: account_id)
+			get_response_hash(response, __method__)
+		end
+
 		private
 			def get_service_name
 				"customer_management"
 			end
-
 	end
-
 end
