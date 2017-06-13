@@ -157,6 +157,7 @@ constants:
       negative_keywords_list: "NegativeKeywordsList"
       negative_keyword: "NegativeKeyword"
       campaign_negative_keyword_list: "CampaignNegativeKeywordList"
+      expanded_text_ad: "ExpandedTextAds"
     download_file_type:
       csv: 'Csv'
       tsv: 'Tsv'
