@@ -35,7 +35,8 @@ module BingAdsApi
 			:name,
 			:status,
 			:time_zone,
-      :campaign_type
+      :campaign_type,
+      :budget_id
 
 		private
 
