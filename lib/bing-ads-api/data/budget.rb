@@ -28,7 +28,7 @@ module BingAdsApi
 
     def to_hash(keys = :underscore)
 			hash = super(keys)
-			hash[:'@xsi:type'] = "#{ClientProxy::NAMESPACE}:Budget"
+			hash[:'@xsi:type'] = "#{ClientProxy::DEFAULT_NAMESPACE}:Budget"
 			return hash
 		end
 

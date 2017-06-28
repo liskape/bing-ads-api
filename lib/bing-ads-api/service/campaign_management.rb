@@ -39,6 +39,24 @@ module BingAdsApi
 			super(options)
 		end
 
+		def add_budgets(budgets)
+      budgets.map!{ |budget| budget.to_hash(:camelcase) }
+			response = call(:add_budgets,
+				{ budgets: { budget: budgets  } } )
+			response_hash = get_response_hash(response, __method__)
+
+      # Checks if there are partial errors in the request
+			if response_hash[:partial_errors].key?(:batch_error)
+				partial_errors = BingAdsApi::PartialErrors.new(
+					response_hash[:partial_errors])
+				response_hash[:partial_errors] = partial_errors
+			else
+				response_hash.delete(:partial_errors)
+			end
+
+			return response_hash
+		end
+
 
 		#########################
 		## Operations Wrappers ##
@@ -94,7 +112,7 @@ module BingAdsApi
 		# Raises:: exception
 		def get_budgets_by_ids(budget_ids)
 			response = call(:get_budgets_by_ids,
-				{ budget_ids: budget_ids })
+				{ budget_ids: {'ins1:long' => budget_ids } })
 			response_hash = get_response_hash(response, __method__)
 			response_budgets = [response_hash[:budgets][:budget]].flatten.compact
 			budgets = response_budgets.map do |budget_hash|
@@ -210,7 +228,7 @@ module BingAdsApi
       response = call(:add_targets_to_library, message)
       return get_response_hash(response, __method__)
     end
-    
+
     # Public : Adds a target to the specified campaign
 		#
 		# Author:: webstreak@webstreak.com
@@ -617,7 +635,7 @@ module BingAdsApi
 
 			return response_hash
 		end
-    
+
     # Public : Delete one or more ads on the specified adgroup
 		#
 		# Author:: dmitrii@webstreak.com
