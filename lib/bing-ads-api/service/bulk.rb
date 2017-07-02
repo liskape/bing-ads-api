@@ -155,13 +155,17 @@ module BingAdsApi
 
 			# TODO: Extract this HTTP interface to separate object
 			if client_proxy.authentication_token.present?
-				response = RestClient.post(
-					upload_request[:upload_url],
-					{file: File.new(file)},
-					"AuthenticationToken" => client_proxy.authentication_token,
-					"DeveloperToken" => client_proxy.developer_token,
-					"CustomerId" => client_proxy.customer_id,
-					"AccountId" => account_id,
+				response = RestClient::Request.execute(
+				  method: :post,
+				  url: upload_request[:upload_url],
+				  payload: { file: File.new(file) },
+				  timeout: 3600,
+				  headers: {
+				    "AuthenticationToken" => client_proxy.authentication_token,
+				    "DeveloperToken" => client_proxy.developer_token,
+				    "CustomerId" => client_proxy.customer_id,
+				    "AccountId" => account_id
+				  }
 				)
 			else
 				response = RestClient.post(
