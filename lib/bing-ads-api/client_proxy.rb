@@ -27,6 +27,8 @@ module BingAdsApi
 
 		# Public : Namespace para atributos bing. Hace referencia a la versión de API usada
 		DEFAULT_NAMESPACE = :v11
+		NAMESPACE = :v11
+
 
 		# Public : Case empleado los nombres de atributos en los XML
 		KEYS_CASE = :camelcase
