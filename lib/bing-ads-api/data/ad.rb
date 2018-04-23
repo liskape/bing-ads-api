@@ -92,10 +92,10 @@ module BingAdsApi
 
 		attr_accessor :final_urls,
       :text,
-			:title_part_1,
-      :title_part_2,
-      :path_1,
-      :path_2
+			:title_part1,
+      :title_part2,
+      :path1,
+      :path2
 
 		# Public : Specification of DataObject#to_hash method that ads the type attribute based on this specific class
 		#
@@ -109,7 +109,7 @@ module BingAdsApi
 			hash[:'@xsi:type'] = "#{ClientProxy::NAMESPACE}:ExpandedTextAd"
       new_hash = {}
       hash['FinalUrls'].each_pair do |k,v|
-        new_hash.merge!({k.downcase => v}) 
+        new_hash.merge!({k.downcase => v})
       end
       hash['FinalUrls'] = new_hash
 			return hash

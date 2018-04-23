@@ -48,4 +48,13 @@ module BingAdsApi
 			end
 
 	end
+
+	class NegativeKeyword < BingAdsApi::DataObject
+		attr_accessor :id,
+			:match_type,
+			:type,
+			:status,
+			:text
+
+	end
 end

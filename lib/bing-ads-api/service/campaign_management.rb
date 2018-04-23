@@ -837,6 +837,23 @@ module BingAdsApi
 		end
 
 
+		def get_negative_keywords_by_adgroup_id(ad_group_id, campaign_id)
+
+			message = {
+				:entity_ids       => { "ins1:long" => ad_group_id },
+				:entity_type      => 'AdGroup',
+				:parent_entity_id => campaign_id,
+			}
+
+			response = call(:get_negative_keywords_by_entity_ids, message)
+			response_hash = get_response_hash(response, :get_negative_keywords_by_entity_ids)
+			response_keywords = [response_hash[:entity_negative_keywords][:entity_negative_keyword][:negative_keywords][:negative_keyword]].flatten
+			keywords = response_keywords.map do |keyword_hash|
+				BingAdsApi::NegativeKeyword.new(keyword_hash)
+			end
+			return keywords
+		end
+
 		private
 			def get_service_name
 				"campaign_management"
@@ -860,6 +877,7 @@ module BingAdsApi
 			# Returns:: BingAdsApi::Ad subclass instance
 			def initialize_ad(ad_hash)
 				ad = BingAdsApi::Ad.new(ad_hash)
+
 				case ad_hash["@i:type".to_sym]
 				when "TextAd"
 					ad = BingAdsApi::TextAd.new(ad_hash)
@@ -867,7 +885,10 @@ module BingAdsApi
 					ad = BingAdsApi::MobileAd.new(ad_hash)
 				when "ProductAd"
 					ad = BingAdsApi::ProductAd.new(ad_hash)
+				when "ExpandedTextAd"
+					ad = BingAdsApi::ExpandedTextAd.new(ad_hash)
 				end
+
 				return ad
 			end
 
