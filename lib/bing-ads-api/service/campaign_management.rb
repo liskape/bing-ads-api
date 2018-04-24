@@ -847,6 +847,11 @@ module BingAdsApi
 
 			response = call(:get_negative_keywords_by_entity_ids, message)
 			response_hash = get_response_hash(response, :get_negative_keywords_by_entity_ids)
+
+			if response_hash[:entity_negative_keywords][:entity_negative_keyword][:negative_keywords].blank?
+				return []
+			end
+
 			response_keywords = [response_hash[:entity_negative_keywords][:entity_negative_keyword][:negative_keywords][:negative_keyword]].flatten
 			keywords = response_keywords.map do |keyword_hash|
 				BingAdsApi::NegativeKeyword.new(keyword_hash)
