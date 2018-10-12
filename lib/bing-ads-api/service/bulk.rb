@@ -62,7 +62,7 @@ module BingAdsApi
 		    data_scope: data_scope_to_array(options[:data_scope]),
 				download_entities: entities_for_soap(entities),
 		    download_file_type: DOWNLOAD_FILE_TYPES[options[:download_file_type].to_s],
-		    format_version: options[:format_version] || 5.0,
+		    format_version: options[:format_version] || 6.0,
 		    last_sync_time_in_utc: options[:last_sync_time_in_utc],
 		    location_target_version: options[:location_target_version],
 		    performance_stats_date_range: options[:performance_stats_date_range]
@@ -89,7 +89,7 @@ module BingAdsApi
 		    data_scope: data_scope_to_array(options[:data_scope]),
 				download_entities: { download_entity: entities_for_soap(entities) },
 		    download_file_type: DOWNLOAD_FILE_TYPES[options[:download_file_type].to_s],
-		    format_version: options[:format_version] || 5.0,
+		    format_version: options[:format_version] || 6.0,
 		    last_sync_time_in_utc: options[:last_sync_time_in_utc],
 		    location_target_version: options[:location_target_version],
 		    performance_stats_date_range: options[:performance_stats_date_range]

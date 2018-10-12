@@ -111,8 +111,7 @@ module BingAdsApi
 		#
 		# Raises:: exception
 		def get_budgets_by_ids(budget_ids)
-			response = call(:get_budgets_by_ids,
-				{ budget_ids: {'ins1:long' => budget_ids } })
+			response = call(:get_budgets_by_ids, { budget_ids: {'ins0:long' => budget_ids } })
 			response_hash = get_response_hash(response, __method__)
 			response_budgets = [response_hash[:budgets][:budget]].flatten.compact
 			budgets = response_budgets.map do |budget_hash|
