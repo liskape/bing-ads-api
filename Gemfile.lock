@@ -39,7 +39,7 @@ GEM
     nokogiri (1.7.1)
       mini_portile2 (~> 2.1.0)
     nori (2.6.0)
-    rack (2.0.1)
+    rack (2.2.3)
     rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
