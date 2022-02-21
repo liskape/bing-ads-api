@@ -158,6 +158,7 @@ constants:
       negative_keyword: "NegativeKeyword"
       campaign_negative_keyword_list: "CampaignNegativeKeywordList"
       expanded_text_ad: "ExpandedTextAds"
+      responsive_search_ad: "ResponsiveSearchAds"
     download_file_type:
       csv: 'Csv'
       tsv: 'Tsv'
@@ -681,6 +682,14 @@ orders:
       - path_2
       - title_part_1
       - title_part_2
+    responsive_search_ad:
+      - final_urls
+      - text
+      - status
+      - path_1
+      - path_2
+      - headline
+      - description
     location_target:
       - id
       - city_target
