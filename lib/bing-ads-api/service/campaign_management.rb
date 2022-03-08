@@ -891,6 +891,8 @@ module BingAdsApi
 					ad = BingAdsApi::ProductAd.new(ad_hash)
 				when "ExpandedTextAd"
 					ad = BingAdsApi::ExpandedTextAd.new(ad_hash)
+				when "ResponsiveSearchAd"
+					ad = BingAdsApi::ResponsiveSearchAd.new(ad_hash)
 				end
 
 				return ad

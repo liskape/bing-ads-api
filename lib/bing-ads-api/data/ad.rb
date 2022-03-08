@@ -92,10 +92,12 @@ module BingAdsApi
 
 		attr_accessor :final_urls,
       :text,
+      :text_part2,
 			:title_part1,
       :title_part2,
+      :title_part3,
       :path1,
-      :path2
+      :path2,
 
 		# Public : Specification of DataObject#to_hash method that ads the type attribute based on this specific class
 		#
@@ -129,6 +131,48 @@ module BingAdsApi
 	end
 
 
+	##
+	# Public : Defines responsive search ad.
+	#
+	# Reference: https://docs.microsoft.com/en-us/advertising/campaign-management-service/responsivesearchad
+	
+	#
+	class ResponsiveSearchAd < BingAdsApi::Ad
+
+		attr_accessor :final_urls,
+      :headlines,
+      :descriptions,
+      :path1,
+      :path2,
+
+
+		# Public : Specification of DataObject#to_hash method that ads the type attribute based on this specific class
+		# keys - specifies the keys case
+		#
+		# Returns:: Hash
+		def to_hash(keys = :underscore)
+			hash = super(keys)
+			hash[:'@xsi:type'] = "#{ClientProxy::NAMESPACE}:ResponsiveSearchAd"
+      new_hash = {}
+      hash['FinalUrls'].each_pair do |k,v|
+        new_hash.merge!({k.downcase => v})
+      end
+      hash['FinalUrls'] = new_hash
+			return hash
+		end
+
+		private
+
+			# Internal: Retrieve the ordered array of keys corresponding to this data
+			# object.
+			#
+			# Author: alex.cavalli@offers.com
+			def get_key_order
+				super.concat(BingAdsApi::Config.instance.
+					campaign_management_orders['responsive_search_ad'])
+			end
+
+	end
 
 
 	##
