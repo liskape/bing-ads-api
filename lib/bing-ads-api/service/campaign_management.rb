@@ -837,9 +837,8 @@ module BingAdsApi
 
 
 		def get_negative_keywords_by_adgroup_id(ad_group_id, campaign_id)
-
 			message = {
-				:entity_ids       => { "ins1:long" => ad_group_id },
+				:entity_ids       => { "ins0:long" => [ad_group_id] },
 				:entity_type      => 'AdGroup',
 				:parent_entity_id => campaign_id,
 			}
